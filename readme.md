@@ -5,10 +5,17 @@ point:
 
 ```javascript
 angular.module('flagConfig').constant('flagConfig', {
-  'server': 'http://localhost/drupal/api/',
-  'access_token': 'foo'
+  'server': 'http://localhost/drupal/api/'
 });
 
+```
+
+One of the controllers should implement a listener. The listener will set the
+access token of the current user. For example:
+```javascript
+  $scope.$on('flagAccessToken', function(event, data) {
+    data.accessToken = localStorageService.get('access_token');
+  });
 ```
 
 How to use the directive it self:
@@ -19,3 +26,5 @@ How to use the directive it self:
 # Drupal part
 For now you'll need to set up a few things. Look at [this](https://gist.github.com/RoySegall/fcb38410b3ecacc3b1d8)
 gist for more info.
+
+You also need to enable Restful token auth module.
