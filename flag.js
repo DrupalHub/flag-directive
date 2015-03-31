@@ -15,28 +15,41 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
       $scope.like = function() {
 
         // Define the variable for other listeners to alter.
-        var data = {
+        var token = {
           'accessToken': ''
         };
-        $rootScope.$broadcast('flagAccessToken', data);
+        $rootScope.$broadcast('flagAccessToken', token);
 
-        $http({
-          method: 'post',
-          url: flagConfig.server + $scope.type,
-          data: {
-            entity_type: $scope.entity,
-            entity_id: $scope.id
-          },
-          headers: {'access_token': data.accessToken}
-        }).
-          success(function(data) {
+        var request = {
+          method: 'get',
+          url: flagConfig.server + $scope.type + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.id,
+          headers: {'access_token': token.accessToken}
+        };
+
+        $http(request).success(function(data) {
+          var type = data.count == 0 ? 'post' : 'delete';
+
+          var request = {
+            method: type,
+            url: flagConfig.server + $scope.type,
+            data: {
+              entity_type: $scope.entity,
+              entity_id: $scope.id
+            },
+            headers: {'access_token': token.accessToken}
+          };
+
+          $http(request).success(function(data) {
             // Increase numbers.
-            $scope.likes++;
-          }).
-          error(function(data) {
-            console.log(data);
-          });
-      }
+            if (type == 'post') {
+              $scope.likes++;
+            }
+            else {
+              $scope.likes = $scope.likes <= 1 ? 0 : $scope.likes--;
+            }
+          })
+        });
+      };
     }
   };
 });
