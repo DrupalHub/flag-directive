@@ -20,6 +20,7 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
         };
         $rootScope.$broadcast('flagAccessToken', token);
 
+        // Check if the current user already flagged the entity.
         var request = {
           method: 'get',
           url: flagConfig.server + $scope.type + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.id,
@@ -27,20 +28,32 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
         };
 
         $http(request).success(function(data) {
-          var type = data.count == 0 ? 'post' : 'delete';
+          var type, address;
+
+          // Build the operation type.
+          address = flagConfig.server + $scope.type;
+          if (data.count == 0) {
+            type = 'post';
+          }
+          else {
+            type = 'delete';
+            address += '/' + $scope.id;
+          }
 
           var request = {
             method: type,
-            url: flagConfig.server + $scope.type,
+            url: address,
             data: {
               entity_type: $scope.entity,
               entity_id: $scope.id
             },
-            headers: {'access_token': token.accessToken}
+            headers: {
+              'access_token': token.accessToken
+            }
           };
 
-          $http(request).success(function(data) {
-            // Increase numbers.
+          $http(request).success(function() {
+            // Increase or decrease the likes number.
             if (type == 'post') {
               $scope.likes++;
             }
