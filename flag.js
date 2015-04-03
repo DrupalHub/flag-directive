@@ -12,6 +12,9 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
     },
     link: function($scope) {
 
+      /**
+       * Like a specific entity.
+       */
       $scope.like = function() {
 
         // Define the variable for other listeners to alter.
@@ -30,6 +33,7 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
         $http(request).success(function(data) {
           var type, address;
 
+          // todo: Move to another function.
           // Build the operation type.
           address = flagConfig.server + $scope.type;
           if (data.count == 0) {
@@ -53,6 +57,7 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
           };
 
           $http(request).success(function() {
+            // todo: Move to another function.
             // Increase or decrease the likes number.
             if (type == 'post') {
               $scope.likes++;
