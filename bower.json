@@ -1,0 +1,16 @@
+{
+  "name": "drupal-restful-flag",
+  "main": "flag.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/DrupalHub/flag-directive",
+  "authors": [
+    "Roy Segall <roy.segall@gizra.com>"
+  ],
+  "description": "Interact with your Drupal backend and flag/unflag entities.",
+  "keywords": [
+    "Drupal",
+    "Restful",
+    "Flag"
+  ],
+  "license": "MIT"
+}
