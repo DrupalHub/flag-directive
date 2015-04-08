@@ -38,8 +38,7 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
         };
 
         $http(request).success(function(data) {
-          this.updateDirective(this.getActions(data));
-
+          $scope.updateDirective($scope.getActions(data));
         });
       };
 
@@ -48,7 +47,7 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
        *
        * @returns {{type: *, address: *}}
        */
-      this.getActions = function(data) {
+      $scope.getActions = function(data) {
         var type, address;
 
         address = flagConfig.server + $scope.type;
@@ -72,7 +71,7 @@ flag.directive('flag', function($http, flagConfig, $rootScope) {
        * @param results
        *   The results from getActions function.
        */
-      this.updateDirective = function(results) {
+      $scope.updateDirective = function(results) {
         var request = {
           method: results.type,
           url: results.address,
