@@ -27,15 +27,20 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
       $rootScope.$broadcast('flagAccessToken', $scope.token);
 
       $scope.$watch('entityId', function(value) {
+        if (+value == 0) {
+          return;
+        }
+
+        console.log(flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + value);
         var request = {
           method: 'get',
-          url: flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.value,
+          url: flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + value,
           headers: {'access_token': $scope.token.accessToken}
         };
 
         $http(request).success(function(data) {
-          $scope.text = data.data.data ? $scope.textUnflagged : $scope.textFlagged;
-          $scope.class_element = data.data.data ? $scope.classflagged : $scope.classUnflagged;
+          $scope.text = data.data.length == 0 ? $scope.textUnflagged : $scope.textFlagged;
+          $scope.class_element = data.data.length == 0 ? $scope.classUnflagged : $scope.classFlagged;
         });
       });
 
