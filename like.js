@@ -1,6 +1,6 @@
 flag.directive('flagLike', function($http, flagConfig, $rootScope) {
   return {
-    restrict: 'AE',
+    restrict: 'E',
     template: '<a href="#" ng-click="$event.preventDefault(); like()"><span class="fa fa-thumbs-o-up" ng-bind="likes"></span></a>',
     scope: {
       type: '@',

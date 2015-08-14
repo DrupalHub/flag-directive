@@ -1,15 +1,15 @@
 flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
   return {
-    restrict: 'AE',
-    template: '<a href="#" ng-click="$event.preventDefault(); toggle()" ng-bind="text">text</a>',
+    restrict: 'E',
+    template: '<a href="#" ng-click="$event.preventDefault(); toggle()"><i ng-class="class_element"></i> {{text}}</a>',
     scope: {
-      type: '@',
-      text_flagged: '@',
-      text_unflagged: '@',
-      class_flagged: '@',
-      class_unflagged: '@',
+      endpoint: '@',
+      textFlagged: '@',
+      textUnflagged: '@',
+      classFlagged: '@',
+      classUnflagged: '@',
       entity: '@',
-      id: '@'
+      entityId: '@'
     },
 
     link: function($scope) {
@@ -26,16 +26,17 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
       // Set up the flag value.
       $rootScope.$broadcast('flagAccessToken', $scope.token);
 
-      $scope.text = 'foo';
+      $scope.$watch('entityId', function(value) {
+        var request = {
+          method: 'get',
+          url: flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.value,
+          headers: {'access_token': $scope.token.accessToken}
+        };
 
-      var request = {
-        method: 'get',
-        url: flagConfig.server + $scope.type + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.id,
-        headers: {'access_token': $scope.token.accessToken}
-      };
-
-      $http(request).success(function(data) {
-        console.log(data);
+        $http(request).success(function(data) {
+          $scope.text = data.data.data ? $scope.textUnflagged : $scope.textFlagged;
+          $scope.class_element = data.data.data ? $scope.classflagged : $scope.classUnflagged;
+        });
       });
 
       /**
