@@ -66,23 +66,7 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
         };
 
         $http(request).success(function(data) {
-          $scope.info = $scope.getActions(data);
-
-          var request = {
-            method: $scope.info.type,
-            url: $scope.info.address,
-            data: {
-              entity_type: $scope.entity,
-              entity_id: $scope.entityId
-            },
-            headers: {
-              'access_token': $scope.accessToken
-            }
-          };
-
-          $http(request).success(function() {
-            $scope.alterText($scope.info == 'post');
-          });
+          $scope.updateDirective($scope.getActions(data));
         });
       };
 
@@ -100,7 +84,7 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
         }
         else {
           type = 'delete';
-          address += '/' + $scope.id;
+          address += '/' + $scope.entityId;
         }
 
         return {
@@ -116,6 +100,21 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
        *   The results from getActions function.
        */
       $scope.updateDirective = function(results) {
+        var request = {
+          method: results.type,
+          url: results.address,
+          data: {
+            entity_type: $scope.entity,
+            entity_id: $scope.entityId
+          },
+          headers: {
+            'access_token': $scope.accessToken
+          }
+        };
+
+        $http(request).success(function(data) {
+          $scope.alterText(data instanceof Object);
+        });
       };
     }
   };
