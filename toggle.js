@@ -25,6 +25,7 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
 
       // Set up the flag value.
       $rootScope.$broadcast('flagAccessToken', $scope.token);
+      $scope.accessToken = $scope.token.accessToken;
 
       $scope.$watch('entityId', function(value) {
         if (+value == 0) {
@@ -35,28 +36,27 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
         var request = {
           method: 'get',
           url: flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + value,
-          headers: {'access_token': $scope.token.accessToken}
+          headers: {'access_token': $scope.accessToken}
         };
 
         $http(request).success(function(data) {
           $scope.text = data.data.length == 0 ? $scope.textUnflagged : $scope.textFlagged;
           $scope.class_element = data.data.length == 0 ? $scope.classUnflagged : $scope.classFlagged;
+          $scope.flaggedd = data.data.length != 0;
         });
       });
 
       /**
-       * Like a specific entity.
+       * Toggle between the states of the flag.
        */
       $scope.toggle = function() {
-
-        // Get the token from other controllers.
-        $rootScope.$broadcast('flagAccessToken', $scope.token);
+        debugger;
 
         // Check if the current user already flagged the entity.
         var request = {
           method: 'get',
-          url: flagConfig.server + $scope.type + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.id,
-          headers: {'access_token': $scope.token.accessToken}
+          url: flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.entityId,
+          headers: {'access_token': $scope.accessToken}
         };
 
         $http(request).success(function(data) {
@@ -72,7 +72,7 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
       $scope.getActions = function(data) {
         var type, address;
 
-        address = flagConfig.server + $scope.type;
+        address = flagConfig.server + $scope.endpoint;
         if (data.count == 0) {
           type = 'post';
         }
