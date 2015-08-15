@@ -18,9 +18,27 @@ access token of the current user. For example:
   });
 ```
 
-How to use the directive it self:
+There are two directives available for you. One it's the like flag which display
+the likes a given entity have in the DB:
 ```html
-<span flag type="like" likes="20" entity="node" id="1"></span>
+<flag-like type="like" likes="{{object.like}}" entity="node" id="{{object.id}}"></flag-like>
+```
+
+This directive will be available with the `like.js` file.
+
+Another directive which can be used it's the toggle directive. This directive
+will be used to check or un-check an entity. A good example is a flag for follow
+or unfollow an entity:
+
+```html
+<flag-toggle
+  endpoint="question_follow"
+  entity="node"
+  entity-id="{{object.id}}"
+  text-flagged="Unfollow"
+  text-unflagged="Follow"
+  class-flagged="fa fa-envelope"
+  class-unflagged="fa fa-envelope-o"></flag-toggle>
 ```
 
 # Drupal part
