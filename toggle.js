@@ -32,7 +32,6 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
           return;
         }
 
-        console.log(flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + value);
         var request = {
           method: 'get',
           url: flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + value,
@@ -40,18 +39,25 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
         };
 
         $http(request).success(function(data) {
-          $scope.text = data.data.length == 0 ? $scope.textUnflagged : $scope.textFlagged;
-          $scope.class_element = data.data.length == 0 ? $scope.classUnflagged : $scope.classFlagged;
-          $scope.flaggedd = data.data.length != 0;
+          $scope.alterText(data.data.length != 0);
         });
       });
+
+      /**
+       * Altering the text of the flag by the state of the flag.
+       *
+       * @param flagged
+       *   Determine if the user flagged this entity or not.
+       */
+      $scope.alterText = function(flagged) {
+        $scope.text = flagged ? $scope.textFlagged : $scope.textUnflagged;
+        $scope.class_element = flagged ? $scope.classFlagged : $scope.classUnflagged;
+      };
 
       /**
        * Toggle between the states of the flag.
        */
       $scope.toggle = function() {
-        debugger;
-
         // Check if the current user already flagged the entity.
         var request = {
           method: 'get',
@@ -60,7 +66,23 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
         };
 
         $http(request).success(function(data) {
-          $scope.updateDirective($scope.getActions(data));
+          $scope.info = $scope.getActions(data);
+
+          var request = {
+            method: $scope.info.type,
+            url: $scope.info.address,
+            data: {
+              entity_type: $scope.entity,
+              entity_id: $scope.entityId
+            },
+            headers: {
+              'access_token': $scope.accessToken
+            }
+          };
+
+          $http(request).success(function() {
+            $scope.alterText($scope.info == 'post');
+          });
         });
       };
 
@@ -94,26 +116,6 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
        *   The results from getActions function.
        */
       $scope.updateDirective = function(results) {
-        var request = {
-          method: results.type,
-          url: results.address,
-          data: {
-            entity_type: $scope.entity,
-            entity_id: $scope.id
-          },
-          headers: {
-            'access_token': $scope.token.accessToken
-          }
-        };
-
-        $http(request).success(function() {
-          if (results.type == 'post') {
-            $scope.likes++;
-          }
-          else {
-            $scope.likes = $scope.likes <= 1 ? 0 : $scope.likes--;
-          }
-        });
       };
     }
   };
