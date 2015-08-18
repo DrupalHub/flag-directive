@@ -32,7 +32,10 @@ flag.directive('flagLike', function($http, flagConfig, $rootScope) {
         var request = {
           method: 'get',
           url: flagConfig.server + $scope.type + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.id,
-          headers: {'access_token': $scope.token.accessToken}
+          headers: {
+            'access_token': $scope.accessToken,
+            'access-token': $scope.accessToken
+          }
         };
 
         $http(request).success(function(data) {
@@ -78,7 +81,8 @@ flag.directive('flagLike', function($http, flagConfig, $rootScope) {
             entity_id: $scope.id
           },
           headers: {
-            'access_token': $scope.token.accessToken
+            'access_token': $scope.accessToken,
+            'access-token': $scope.accessToken
           }
         };
 

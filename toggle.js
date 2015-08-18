@@ -35,7 +35,10 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
         var request = {
           method: 'get',
           url: flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + value,
-          headers: {'access_token': $scope.accessToken}
+          headers: {
+            'access_token': $scope.accessToken,
+            'access-token': $scope.accessToken
+          }
         };
 
         $http(request).success(function(data) {
@@ -62,7 +65,10 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
         var request = {
           method: 'get',
           url: flagConfig.server + $scope.endpoint + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.entityId,
-          headers: {'access_token': $scope.accessToken}
+          headers: {
+            'access_token': $scope.accessToken,
+            'access-token': $scope.accessToken
+          }
         };
 
         $http(request).success(function(data) {
@@ -108,7 +114,8 @@ flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
             entity_id: $scope.entityId
           },
           headers: {
-            'access_token': $scope.accessToken
+            'access_token': $scope.accessToken,
+            'access-token': $scope.accessToken
           }
         };
 
