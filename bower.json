@@ -1,7 +1,7 @@
 {
   "name": "drupal-restful-flag",
   "main": "flag.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "homepage": "https://github.com/DrupalHub/flag-directive",
   "authors": [
     "Roy Segall <roy.segall@gizra.com>"
