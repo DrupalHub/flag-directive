@@ -1,7 +1,7 @@
 flag.directive('flagToggle', function($http, flagConfig, $rootScope) {
   return {
     restrict: 'E',
-    template: '<a href="#" ng-click="$event.preventDefault(); toggle()"><i ng-class="class_element"></i> {{text}}</a>',
+    template: '<i ng-class="class_element"></i><a href="#" ng-click="$event.preventDefault(); toggle()">{{text}}</a>',
     scope: {
       endpoint: '@',
       textFlagged: '@',
