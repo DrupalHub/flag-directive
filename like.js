@@ -33,8 +33,8 @@ flag.directive('flagLike', function($http, flagConfig, $rootScope) {
           method: 'get',
           url: flagConfig.server + $scope.type + '?check_flagged&entity=' + $scope.entity + '&id=' + $scope.id,
           headers: {
-            'access_token': $scope.accessToken,
-            'access-token': $scope.accessToken
+            'access_token': $scope.token.accessToken,
+            'access-token': $scope.token.accessToken
           }
         };
 
@@ -81,8 +81,8 @@ flag.directive('flagLike', function($http, flagConfig, $rootScope) {
             entity_id: $scope.id
           },
           headers: {
-            'access_token': $scope.accessToken,
-            'access-token': $scope.accessToken
+            'access_token': $scope.token.accessToken,
+            'access-token': $scope.token.accessToken
           }
         };
 
