@@ -91,7 +91,7 @@ flag.directive('flagLike', function($http, flagConfig, $rootScope) {
             $scope.likes++;
           }
           else {
-            $scope.likes = $scope.likes <= 1 ? 0 : $scope.likes--;
+            $scope.likes = $scope.likes <= 1 ? 0 : ($scope.likes - 1);
           }
         });
       };
